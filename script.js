@@ -21,6 +21,9 @@ document.addEventListener("DOMContentLoaded", function(){
         
         newListItem.appendChild(removeButton);
         taskList.appendChild(newListItem);
+
+        tasks.push(taskValue); 
+        localStorage.setItem('tasks', JSON.stringify(tasks));
         
     }
     addButton.addEventListener("click", addTask);
@@ -30,4 +33,31 @@ document.addEventListener("DOMContentLoaded", function(){
     }
   });
   addTask();
+
+   const tasksJSON = localStorage.getItem('tasks');
+    if (tasksJSON) {
+    const tasks = JSON.parse(tasksJSON);
+}
 })
+function removeTask(event) {
+  const taskToRemove = event.target.parentNode;
+
+  taskList.removeChild(taskToRemove);
+  const taskIndex = tasks.indexOf(taskToRemove.textContent); 
+  if (taskIndex !== -1) {
+    tasks.splice(taskIndex, 1);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  } 
+}
+function loadTasksFromLocalStorage() {
+  const tasksJSON = localStorage.getItem('tasks');
+  if (tasksJSON) {
+    const tasks = JSON.parse(tasksJSON);
+    const taskList = document.getElementById('taskList'); 
+    tasks.forEach(function(task) {
+      const newTask = document.createElement('li');
+      newTask.textContent = task;
+      taskList.appendChild(newTask);
+    });
+  }
+}
